@@ -31,7 +31,7 @@ members = [
     "examples/send_bytes",
     "examples/webhooks",
     "examples/wgpu_room"
-]
+, "examples/remote_control_host", "examples/remote_control_client"]
 
 [workspace.package]
 edition = "2021"
