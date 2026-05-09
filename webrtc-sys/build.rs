@@ -149,7 +149,7 @@ fn main() {
             println!("cargo:rustc-link-lib=dylib=mfuuid");
             println!("cargo:rustc-link-lib=dylib=mf");
 
-            // MF encoder files are compiled separately to avoid libc++ header
+            // MF codec files are compiled separately to avoid libc++ header
             // conflicts with Windows SDK headers (mfapi.h, mftransform.h, etc.)
             cc::Build::new()
                 .cpp(true)
@@ -160,6 +160,8 @@ fn main() {
                 .include(webrtc_include.join("third_party/libyuv/include/"))
                 .file("src/mf/mf_encoder_factory.cpp")
                 .file("src/mf/mf_video_encoder_impl.cpp")
+                .file("src/mf/mf_decoder_factory.cpp")
+                .file("src/mf/mf_video_decoder_impl.cpp")
                 .define("USE_MF_VIDEO_CODEC", "1")
                 .define("WEBRTC_WIN", None)
                 .define("NOMINMAX", None)
@@ -168,7 +170,7 @@ fn main() {
                 .flag("/EHsc")
                 .flag("/W0")
                 .warnings(false)
-                .compile("mf_encoder");
+                .compile("mf_codec");
 
             builder.flag("-DUSE_MF_VIDEO_CODEC=1").flag("/std:c++20").flag("/EHsc");
         }
@@ -206,6 +208,8 @@ fn main() {
                         .file("src/vaapi/vaapi_h264_encoder_wrapper.cpp")
                         .file("src/vaapi/vaapi_encoder_factory.cpp")
                         .file("src/vaapi/h264_encoder_impl.cpp")
+                        .file("src/vaapi/vaapi_decoder_factory.cpp")
+                        .file("src/vaapi/vaapi_decoder_impl.cpp")
                         .flag("-DUSE_VAAPI_VIDEO_CODEC=1");
 
                     add_lazy_load_so(
