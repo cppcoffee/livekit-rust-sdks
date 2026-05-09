@@ -144,23 +144,33 @@ fn main() {
             println!("cargo:rustc-link-lib=dylib=dwmapi");
             println!("cargo:rustc-link-lib=dylib=shcore");
 
-            //let path = env::current_dir().unwrap();
-            //println!("cargo:rustc-link-search=native={}/vaapi-windows/x64/lib", path.display());
-            //println!("cargo:rustc-link-lib=dylib=va");
-            //println!("cargo:rustc-link-lib=dylib=va_win32");
+            // Media Foundation libraries for MF hardware encoder
+            println!("cargo:rustc-link-lib=dylib=mfplat");
+            println!("cargo:rustc-link-lib=dylib=mfuuid");
+            println!("cargo:rustc-link-lib=dylib=mf");
 
-            builder
-                //.include("./vaapi-windows/DirectX-Headers-1.0/include")
-                //.include(path::PathBuf::from("./vaapi-windows/x64/include"))
-                //.file("vaapi-windows/DirectX-Headers-1.0/src/dxguids.cpp")
-                //.file("src/vaapi/vaapi_display_win32.cpp")
-                //.file("src/vaapi/vaapi_h264_encoder_wrapper.cpp")
-                //.file("src/vaapi/vaapi_encoder_factory.cpp")
-                //.file("src/vaapi/h264_encoder_impl.cpp")
+            // MF encoder files are compiled separately to avoid libc++ header
+            // conflicts with Windows SDK headers (mfapi.h, mftransform.h, etc.)
+            cc::Build::new()
+                .cpp(true)
+                .include("src/mf")
+                .include("./include")
+                .include(&webrtc_include)
+                .include(webrtc_include.join("third_party/abseil-cpp/"))
+                .include(webrtc_include.join("third_party/libyuv/include/"))
+                .file("src/mf/mf_encoder_factory.cpp")
+                .file("src/mf/mf_video_encoder_impl.cpp")
+                .define("USE_MF_VIDEO_CODEC", "1")
+                .define("WEBRTC_WIN", None)
+                .define("NOMINMAX", None)
+                .define("WIN32_LEAN_AND_MEAN", None)
                 .flag("/std:c++20")
-                //.flag("/wd4819")
-                //.flag("/wd4068")
-                .flag("/EHsc");
+                .flag("/EHsc")
+                .flag("/W0")
+                .warnings(false)
+                .compile("mf_encoder");
+
+            builder.flag("-DUSE_MF_VIDEO_CODEC=1").flag("/std:c++20").flag("/EHsc");
         }
         "linux" => {
             println!("cargo:rustc-link-lib=dylib=rt");
