@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <va/va_drm.h>
 
+#include "api/scoped_refptr.h"
 #include "api/video/i420_buffer.h"
 #include "modules/video_coding/include/video_error_codes.h"
 #include "rtc_base/logging.h"
