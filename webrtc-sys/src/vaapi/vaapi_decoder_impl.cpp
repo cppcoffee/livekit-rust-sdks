@@ -266,7 +266,7 @@ bool VaapiDecoderImpl::OutputFrame(VASurfaceID surface, uint32_t rtp_timestamp) 
   }
 
   uint8_t* data = static_cast<uint8_t*>(mapped);
-  rtc::scoped_refptr<I420Buffer> i420_buffer =
+  scoped_refptr<I420Buffer> i420_buffer =
       buffer_pool_.CreateI420Buffer(width_, height_);
 
   // NV12 → I420 conversion
