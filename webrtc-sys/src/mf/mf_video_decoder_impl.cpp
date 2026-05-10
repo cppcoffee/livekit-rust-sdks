@@ -340,7 +340,7 @@ bool MFVideoDecoderImpl::DrainOutput(uint32_t rtp_timestamp) {
       stride = static_cast<uint32_t>((data_len * 2) / (height_ * 3));
     }
 
-    rtc::scoped_refptr<I420Buffer> i420_buffer =
+    scoped_refptr<I420Buffer> i420_buffer =
         buffer_pool_.CreateI420Buffer(width_, height_);
 
     libyuv::NV12ToI420(
