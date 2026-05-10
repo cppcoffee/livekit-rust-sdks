@@ -21,12 +21,15 @@
 
 #include "mf_video_decoder_impl.h"
 
+#include "api/scoped_refptr.h"
 #include "api/video/i420_buffer.h"
 #include "modules/video_coding/include/video_error_codes.h"
 #include "rtc_base/logging.h"
 #include "third_party/libyuv/include/libyuv/convert.h"
 
+#include <codecapi.h>
 #include <mferror.h>
+#include <strmif.h>
 
 #pragma comment(lib, "mfplat.lib")
 #pragma comment(lib, "mfuuid.lib")

@@ -21,6 +21,3 @@ pub mod observer;
 pub mod promise;
 
 include!("livekit.rs");
-
-#[cfg(feature = "serde")]
-include!("livekit.serde.rs");

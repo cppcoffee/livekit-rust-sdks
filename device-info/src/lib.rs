@@ -80,11 +80,10 @@ pub fn device_info() -> Result<DeviceInfo, DeviceInfoError> {
 
 // Compile-time assertions: DeviceInfo and DeviceInfoError must be Send + Sync.
 const _: () = {
-    fn assert_send_sync<T: Send + Sync>() {}
-    fn assert_all() {
-        assert_send_sync::<DeviceInfo>();
-        assert_send_sync::<DeviceInfoError>();
-    }
+    // Trick: use trait bounds in a const context without triggering dead_code.
+    const fn assert_send_sync<T: Send + Sync>() {}
+    assert_send_sync::<DeviceInfo>();
+    assert_send_sync::<DeviceInfoError>();
 };
 
 #[cfg(test)]
