@@ -16,19 +16,19 @@
   #define rint16D(a,b) __asm__ __volatile__("fistps %0": "=m"(a): "t"(b): "st")
   #define rint32F rint32D
   #define rint16F rint16D
-  //#define FE_INVALID 1
-  // static __inline int fe_test_invalid(void) {
-  //   int status_word;
-  //   __asm__ __volatile__("fnstsw %%ax": "=a"(status_word));
-  //   return status_word & FE_INVALID;
-  // }
-  // static __inline int fe_clear_invalid(void) {
-  //   int32_t status[7];
-  //   __asm__ __volatile__("fnstenv %0": "=m"(status));
-  //   status[1] &= ~FE_INVALID;
-  //   __asm__ __volatile__("fldenv %0": : "m"(*status));
-  //   return 0;
-  // }
+  /*#define FE_INVALID 1*/
+  /* static __inline int fe_test_invalid(void) {
+     int status_word;
+     __asm__ __volatile__("fnstsw %%ax": "=a"(status_word));
+     return status_word & FE_INVALID;
+   } */
+  /* static __inline int fe_clear_invalid(void) {
+     int32_t status[7];
+     __asm__ __volatile__("fnstenv %0": "=m"(status));
+     status[1] &= ~FE_INVALID;
+     __asm__ __volatile__("fldenv %0": : "m"(*status));
+     return 0;
+   } */
 #elif defined _MSC_VER && defined _M_IX86
   #define FPU_RINT32
   #define FPU_RINT16
